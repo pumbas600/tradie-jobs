@@ -1,5 +1,5 @@
 import Client from '../types/Client';
-import JobInfo, { Status } from '../types/JobInfo';
+import JobInfo from '../types/JobInfo';
 import { randomJob } from './DataPopulator';
 
 let jobIdCounter = 0;
@@ -11,8 +11,6 @@ Array(5)
         const job = randomJob();
         jobs[job.id] = job;
     });
-
-console.log(Object.values(Status));
 
 export function getAllJobs(): JobInfo[] {
     return Object.values(jobs);
