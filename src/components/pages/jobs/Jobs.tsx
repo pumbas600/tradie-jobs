@@ -1,19 +1,43 @@
-import { Box, Container, Heading, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
-import { useState } from 'react';
+import { Box, Container, Heading, Stack, Table, TableContainer, Tbody, Td, Thead, Tr } from '@chakra-ui/react';
+import { useCallback, useState } from 'react';
 import { getAllJobs } from '../../../data/JobManager';
 import JobInfo from '../../../types/JobInfo';
 import { SortingDirection } from '../../../types/Sorting';
-import Sortable from '../../headers/Sortable';
+import Sortable, { SortableProps } from '../../headers/Sortable';
 import StatusTag from '../../status/StatusTag';
 import Job from './Job';
 
+type Comparator<T> = (a: T, b: T) => number;
 type SortedBy = 'created' | 'status' | 'id' | 'name' | 'client';
+
+const comparators: Record<SortedBy, Comparator<JobInfo>> = {
+    created: (a, b) => a.created.getTime() - b.created.getTime(),
+    status: (a, b) => a.status.localeCompare(b.status),
+    id: (a, b) => a.id.localeCompare(b.id),
+    name: (a, b) => a.name.localeCompare(b.name),
+    client: (a, b) => a.client.name.localeCompare(b.client.name),
+};
 
 const Jobs = () => {
     const [visibleJobs, setVisibleJobs] = useState(getAllJobs());
     const [selectedJob, setSelectedJob] = useState<JobInfo | null>(null);
     const [sortedBy, setSortedBy] = useState<SortedBy>('created');
     const [direction, setDirection] = useState<SortingDirection>('desc');
+
+    const handleChangeSort = (by: SortedBy, direction: SortingDirection) => {
+        setSortedBy(by);
+        setDirection(direction);
+        applySorting();
+    };
+
+    const applySorting = useCallback(() => {
+        const comparator: Comparator<JobInfo> =
+            direction === 'asc' ? comparators[sortedBy] : (a, b) => -comparators[sortedBy](a, b);
+
+        const sortedJobs = [...visibleJobs];
+        sortedJobs.sort(comparator);
+        setVisibleJobs(sortedJobs);
+    }, [visibleJobs, sortedBy, direction]);
 
     const renderJobRow = (job: JobInfo) => {
         return (
@@ -28,6 +52,13 @@ const Jobs = () => {
         );
     };
 
+    const getSortableProps = (property: SortedBy): SortableProps => {
+        return {
+            isApplied: property === sortedBy,
+            handleApply: (direction) => handleChangeSort(property, direction),
+        };
+    };
+
     return (
         <Container maxW="1200px" my={4}>
             <Heading color="blue.600" mb={4}>
@@ -38,10 +69,10 @@ const Jobs = () => {
                     <Table variant="simple" size="md">
                         <Thead>
                             <Tr>
-                                <Sortable>Status</Sortable>
-                                <Sortable>ID</Sortable>
-                                <Sortable>Name</Sortable>
-                                <Sortable>Client</Sortable>
+                                <Sortable {...getSortableProps('status')}>Status</Sortable>
+                                <Sortable {...getSortableProps('id')}>ID</Sortable>
+                                <Sortable {...getSortableProps('name')}>Name</Sortable>
+                                <Sortable {...getSortableProps('client')}>Client</Sortable>
                             </Tr>
                         </Thead>
                         <Tbody>{visibleJobs.map(renderJobRow)}</Tbody>
