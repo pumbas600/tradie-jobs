@@ -1,12 +1,17 @@
 import { PhoneIcon, EmailIcon, AddIcon, CloseIcon, CheckIcon } from '@chakra-ui/icons';
 import { Box, IconButton, Stack, Text, Textarea } from '@chakra-ui/react';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import JobInfo from '../../../types/JobInfo';
 import StatusTag from '../../status/StatusTag';
 import Note from './Note';
 
 const Job = ({ job }: { job: JobInfo }) => {
     const [newNote, setNewNote] = useState<string | null>(null);
+
+    useEffect(() => {
+        // When the job is changed, discard the current note
+        setNewNote(null);
+    }, [job]);
 
     const handleChangeMessage = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setNewNote(e.target.value);
