@@ -31,8 +31,7 @@ const Sortable = ({ isApplied, handleApply, children }: SortableProps) => {
             size: 'xs',
             color: isApplied ? 'current' : 'gray.400',
             title: tooltip,
-            h: '16px',
-            w: '16px',
+            w: '12px',
             onClick: handleOnClick,
             'aria-label': tooltip,
         };
@@ -46,7 +45,7 @@ const Sortable = ({ isApplied, handleApply, children }: SortableProps) => {
 
     return (
         <Th py={2}>
-            <Stack direction="row" spacing={0} ml={-1}>
+            <Stack direction="row" spacing={1} ml={-1} alignItems="center">
                 {renderSortingButton()}
                 <Text>{children}</Text>
             </Stack>
