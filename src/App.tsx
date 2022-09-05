@@ -1,5 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react';
-import Jobs from './pages/Jobs';
+import Jobs from './components/pages/Jobs';
 
 const App = () => {
     return (
