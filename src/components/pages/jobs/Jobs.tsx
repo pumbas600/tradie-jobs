@@ -27,17 +27,17 @@ const Jobs = () => {
     const handleChangeSort = (by: SortedBy, direction: SortingDirection) => {
         setSortedBy(by);
         setDirection(direction);
-        applySorting();
+        applySorting(by, direction);
     };
 
-    const applySorting = useCallback(() => {
+    const applySorting = (by: SortedBy, direction: SortingDirection) => {
         const comparator: Comparator<JobInfo> =
-            direction === 'asc' ? comparators[sortedBy] : (a, b) => -comparators[sortedBy](a, b);
+            direction === 'asc' ? comparators[by] : (a, b) => -comparators[by](a, b);
 
         const sortedJobs = [...visibleJobs];
         sortedJobs.sort(comparator);
         setVisibleJobs(sortedJobs);
-    }, [visibleJobs, sortedBy, direction]);
+    };
 
     const renderJobRow = (job: JobInfo) => {
         return (
