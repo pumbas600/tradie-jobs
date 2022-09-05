@@ -48,7 +48,7 @@ const Jobs = () => {
                     </Table>
                 </TableContainer>
                 <Box maxW="360px" minW="360px" h="full">
-                    {selectedJob ? <Job job={selectedJob} /> : <Heading color="gray.500">No Selected Job</Heading>}
+                    {selectedJob ? <Job job={selectedJob} /> : <Heading color="gray.600">No Selected Job</Heading>}
                 </Box>
             </Stack>
         </Container>

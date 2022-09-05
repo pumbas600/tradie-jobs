@@ -83,7 +83,7 @@ const Job = ({ job }: { job: JobInfo }) => {
                     <Text fontSize="2xl" fontWeight="bold" color="blue.600">
                         {job.name}
                     </Text>
-                    <Text fontWeight="semibold" color="gray.500">
+                    <Text fontWeight="semibold" color="gray.600">
                         {job.id}
                     </Text>
                 </Stack>

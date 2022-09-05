@@ -27,7 +27,7 @@ const Note = ({ note }: { note: NoteInfo }) => {
             onSubmit={handleUpdateMessage}
         >
             <Stack direction="row" justifyContent="space-between">
-                <EditablePreview borderColor="gray.500" borderLeftWidth={4} pl={3} py={1} borderRadius="none" />
+                <EditablePreview borderColor="gray.400" borderLeftWidth={4} pl={3} py={1} borderRadius="none" />
                 <EditableTextarea px={2} />
                 <EditableControls canSave={newValue.trim().length !== 0} />
             </Stack>
