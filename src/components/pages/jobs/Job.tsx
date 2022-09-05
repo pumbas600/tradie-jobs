@@ -3,7 +3,7 @@ import { Box, IconButton, Stack, Text, Textarea } from '@chakra-ui/react';
 import { ReactNode, useEffect, useState } from 'react';
 import JobInfo from '../../../types/JobInfo';
 import StatusTag from '../../status/StatusTag';
-import Note from './Note';
+import Note from '../../notes/Note';
 
 const Job = ({ job }: { job: JobInfo }) => {
     const [newNote, setNewNote] = useState<string | null>(null);
@@ -18,9 +18,16 @@ const Job = ({ job }: { job: JobInfo }) => {
     };
 
     const handleSaveNewNote = () => {
-        // This will only be called if there is a non-empty string
+        // Jobs are passed by reference. This will also only be called if there is a non-empty message
         job.notes.push({ message: newNote!.trim(), created: new Date() });
         setNewNote(null);
+    };
+
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        // Shortcut for discarding new note
+        if (e.key === 'Escape') {
+            setNewNote(null);
+        }
     };
 
     const renderContactInfo = (icon: ReactNode, label: string): ReactNode => {
@@ -103,7 +110,12 @@ const Job = ({ job }: { job: JobInfo }) => {
                 {renderNoteButtons()}
             </Stack>
             {newNote !== null && (
-                <Textarea placeholder="Enter note here..." value={newNote} onChange={handleChangeMessage} />
+                <Textarea
+                    placeholder="Enter note here..."
+                    value={newNote}
+                    onChange={handleChangeMessage}
+                    onKeyDown={handleKeyPress}
+                />
             )}
             <Stack>{renderNotes()}</Stack>
         </Stack>
