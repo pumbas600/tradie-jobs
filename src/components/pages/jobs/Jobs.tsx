@@ -1,17 +1,4 @@
-import {
-    Container,
-    Grid,
-    GridItem,
-    Heading,
-    Stack,
-    Table,
-    TableContainer,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr,
-} from '@chakra-ui/react';
+import { Container, Heading, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import { useState } from 'react';
 import { getAllJobs } from '../../../data/JobManager';
 import JobInfo from '../../../types/JobInfo';

@@ -1,11 +1,20 @@
-import { PhoneIcon, EmailIcon, AddIcon } from '@chakra-ui/icons';
-import { IconButton, Stack, Text } from '@chakra-ui/react';
+import { PhoneIcon, EmailIcon, AddIcon, CloseIcon, CheckIcon } from '@chakra-ui/icons';
+import { Box, IconButton, Stack, Text, Textarea } from '@chakra-ui/react';
 import { ReactNode, useState } from 'react';
 import JobInfo from '../../../types/JobInfo';
 import StatusTag from '../../status/StatusTag';
+import Note from './Note';
 
 const Job = ({ job }: { job: JobInfo }) => {
     const [newNote, setNewNote] = useState<string | null>(null);
+
+    const handleChangeMessage = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setNewNote(e.target.value.trim());
+    };
+
+    const handleSaveNewNote = () => {
+        setNewNote(null);
+    };
 
     const renderContactInfo = (icon: ReactNode, label: string): ReactNode => {
         return (
@@ -15,7 +24,40 @@ const Job = ({ job }: { job: JobInfo }) => {
         );
     };
 
-    const renderNotes = (): ReactNode => {};
+    const renderNotes = (): ReactNode => {
+        return job.notes.map((note) => <Note note={note} />);
+    };
+
+    const renderNoteButtons = (): ReactNode => {
+        return newNote === null ? (
+            <IconButton
+                title="Add new note"
+                aria-label="Add new note"
+                icon={<AddIcon />}
+                size="sm"
+                onClick={() => setNewNote('')}
+            />
+        ) : (
+            <Box>
+                {newNote.length !== 0 && (
+                    <IconButton
+                        title="Save new note"
+                        aria-label="Save new note"
+                        icon={<CheckIcon />}
+                        size="sm"
+                        onClick={handleSaveNewNote}
+                    />
+                )}
+                <IconButton
+                    title="Discard new note"
+                    aria-label="Discard new note"
+                    icon={<CloseIcon />}
+                    size="sm"
+                    onClick={() => setNewNote(null)}
+                />
+            </Box>
+        );
+    };
 
     return (
         <Stack px={2} minW="360px" spacing={4}>
@@ -48,14 +90,12 @@ const Job = ({ job }: { job: JobInfo }) => {
                 <Text fontSize="lg" fontWeight="bold">
                     Notes
                 </Text>
-                <IconButton
-                    title="Add new note"
-                    aria-label="Add new note"
-                    icon={<AddIcon />}
-                    size="sm"
-                    onClick={() => setNewNote('')}
-                />
+                {renderNoteButtons()}
             </Stack>
+            {newNote !== null && (
+                <Textarea placeholder="Enter note here..." value={newNote} onChange={handleChangeMessage} />
+            )}
+            {renderNotes()}
         </Stack>
     );
 };
