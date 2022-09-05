@@ -9,13 +9,13 @@ const Jobs = () => {
 
     const renderJobRow = (job: JobInfo) => {
         return (
-            <Tr>
-                <Td>
+            <Tr key={job.id}>
+                <Td p={2}>
                     <StatusTag status={job.status} />
                 </Td>
-                <Td>{job.id}</Td>
-                <Td>{job.name}</Td>
-                <Td>{job.client.name}</Td>
+                <Td p={2}>{job.id}</Td>
+                <Td p={2}>{job.name}</Td>
+                <Td p={2}>{job.client.name}</Td>
             </Tr>
         );
     };
@@ -24,7 +24,7 @@ const Jobs = () => {
         <Container maxW="container.lg" my={4}>
             <Heading color="blue.600">Jobs</Heading>
             <TableContainer>
-                <Table variant="simple">
+                <Table variant="simple" size="md">
                     <Thead>
                         <Tr>
                             <Th>Status</Th>
@@ -36,7 +36,6 @@ const Jobs = () => {
                     <Tbody>{visibleJobs.map(renderJobRow)}</Tbody>
                 </Table>
             </TableContainer>
-            <StatusTag status={Status.Completed} />
         </Container>
     );
 };

@@ -12,7 +12,7 @@ const StatusTag = ({ status }: { status: Status }) => {
 
     return (
         <Stack w="120px" borderRadius="lg" bg={colours[status]} px={4} py={0.5} gap={2}>
-            <Text color="white" fontWeight="semibold" whiteSpace="nowrap">
+            <Text color="white" fontWeight="semibold" whiteSpace="nowrap" align="center">
                 {status}
             </Text>
         </Stack>
