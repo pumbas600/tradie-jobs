@@ -1,4 +1,5 @@
 import { LoremIpsum } from 'lorem-ipsum';
+import { capitalise, randBetween, randint, randomEnum } from '../helpers/Utilities';
 import Client from '../types/Client';
 import JobInfo, { Status } from '../types/JobInfo';
 import NoteInfo from '../types/NoteInfo';
@@ -29,36 +30,6 @@ const clients: Client[] = [
         phone: '0800 461 219',
     },
 ];
-
-function capitalise(str: string): string {
-    return str.slice(0, 1).toUpperCase() + str.slice(1);
-}
-
-/**
- * Generates a random integer between 0 and the upper limit (inclusive).
- *
- * @param upperLimit The upper limit for the random integer
- */
-function randint(upperLimit: number): number {
-    return Math.floor(Math.random() * (upperLimit + 1));
-}
-
-/**
- * Generates a random integer between the lower limit and the upper limit (inclusive).
- *
- * @param lowerLimit The lower limit for the random integer
- * @param upperLimit The upper limit for the random integer
- */
-function randBetween(lowerLimit: number, upperLimit: number): number {
-    return randint(upperLimit - lowerLimit) + lowerLimit;
-}
-
-// From https://stackoverflow.com/a/56264925/12643981
-function randomEnum<T extends {}>(anEnum: T): T[keyof T] {
-    const enumValues = Object.values(anEnum) as unknown as T[keyof T][];
-    const randomIndex = Math.floor(Math.random() * enumValues.length);
-    return enumValues[randomIndex];
-}
 
 function randomDate(): Date {
     // Generate a random date between now and the earliest possible created date
