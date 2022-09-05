@@ -7,6 +7,7 @@ export default interface JobInfo {
     status: Status;
     created: Date;
     client: Client;
+    description?: string;
     notes: Note[];
 }
 

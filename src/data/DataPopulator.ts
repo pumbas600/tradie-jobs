@@ -38,10 +38,11 @@ export function randomJob(): JobInfo {
     const client = randomClient();
     return {
         id: generateJobId(client),
-        name: 'A Job name',
+        name: 'A Job Name',
         status: randomEnum(Status),
         created: randomDate(),
         client: client,
+        description: 'This is an example description...',
         notes: [],
     };
 }
