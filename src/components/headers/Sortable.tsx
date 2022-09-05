@@ -23,29 +23,24 @@ const Sortable = ({ isApplied, handleApply, children }: SortableProps) => {
     };
 
     const renderSortingButton = (): ReactNode => {
-        const commonProps: Omit<IconButtonProps, 'aria-label'> = {
+        const tooltip =
+            direction === 'asc' || !isApplied ? 'Change to sort by descending' : 'Change to sort by ascending';
+
+        const commonProps: IconButtonProps = {
             variant: 'ghost',
             size: 'xs',
             color: isApplied ? 'current' : 'gray.400',
+            title: tooltip,
             h: '16px',
             w: '16px',
             onClick: handleOnClick,
+            'aria-label': tooltip,
         };
 
         return direction === 'asc' ? (
-            <IconButton
-                title="Change to sort by descending"
-                aria-label="Change to sort by descending"
-                icon={<TriangleUpIcon />}
-                {...commonProps}
-            />
+            <IconButton icon={<TriangleUpIcon />} {...commonProps} />
         ) : (
-            <IconButton
-                title="Change to sort by ascending"
-                aria-label="Change to sort by ascending"
-                icon={<TriangleDownIcon />}
-                {...commonProps}
-            />
+            <IconButton icon={<TriangleDownIcon />} {...commonProps} />
         );
     };
 
