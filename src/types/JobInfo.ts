@@ -1,5 +1,5 @@
 import Client from './Client';
-import Note from './Note';
+import NoteInfo from './NoteInfo';
 
 export default interface JobInfo {
     id: string;
@@ -8,7 +8,7 @@ export default interface JobInfo {
     created: Date;
     client: Client;
     description?: string;
-    notes: Note[];
+    notes: NoteInfo[];
 }
 
 export enum Status {

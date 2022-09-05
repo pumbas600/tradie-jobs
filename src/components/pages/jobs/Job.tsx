@@ -15,6 +15,8 @@ const Job = ({ job }: { job: JobInfo }) => {
         );
     };
 
+    const renderNotes = (): ReactNode => {};
+
     return (
         <Stack px={2} minW="360px" spacing={4}>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
