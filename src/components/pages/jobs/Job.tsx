@@ -78,9 +78,9 @@ const Job = ({ job }: { job: JobInfo }) => {
 
     return (
         <Stack px={2} w="full" spacing={4}>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Stack spacing={-1}>
-                    <Text fontSize="2xl" fontWeight="bold" color="blue.600">
+            <Stack direction="row" justifyContent="space-between" alignItems="start" spacing={2}>
+                <Stack spacing={1}>
+                    <Text fontSize="2xl" lineHeight={1} fontWeight="bold" color="blue.600">
                         {job.name}
                     </Text>
                     <Text fontWeight="semibold" color="gray.600">
