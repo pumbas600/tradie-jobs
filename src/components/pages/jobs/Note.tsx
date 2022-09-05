@@ -3,7 +3,7 @@ import NoteInfo from '../../../types/NoteInfo';
 
 const Note = ({ note }: { note: NoteInfo }) => {
     return (
-        <Box borderColor="gray.500" borderTopWidth={1} borderBottomWidth={1}>
+        <Box borderColor="gray.500" borderLeftWidth={4} px={3} py={1}>
             <Text>{note.message}</Text>
         </Box>
     );

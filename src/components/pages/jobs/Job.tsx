@@ -9,10 +9,12 @@ const Job = ({ job }: { job: JobInfo }) => {
     const [newNote, setNewNote] = useState<string | null>(null);
 
     const handleChangeMessage = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setNewNote(e.target.value.trim());
+        setNewNote(e.target.value);
     };
 
     const handleSaveNewNote = () => {
+        // This will only be called if there is a non-empty string
+        job.notes.push({ message: newNote!.trim(), created: new Date() });
         setNewNote(null);
     };
 
@@ -25,12 +27,13 @@ const Job = ({ job }: { job: JobInfo }) => {
     };
 
     const renderNotes = (): ReactNode => {
-        return job.notes.map((note) => <Note note={note} />);
+        return job.notes.map((note) => <Note key={note.created.getTime()} note={note} />);
     };
 
     const renderNoteButtons = (): ReactNode => {
         return newNote === null ? (
             <IconButton
+                variant="ghost"
                 title="Add new note"
                 aria-label="Add new note"
                 icon={<AddIcon />}
@@ -39,8 +42,9 @@ const Job = ({ job }: { job: JobInfo }) => {
             />
         ) : (
             <Box>
-                {newNote.length !== 0 && (
+                {newNote.trim().length !== 0 && (
                     <IconButton
+                        variant="ghost"
                         title="Save new note"
                         aria-label="Save new note"
                         icon={<CheckIcon />}
@@ -49,6 +53,7 @@ const Job = ({ job }: { job: JobInfo }) => {
                     />
                 )}
                 <IconButton
+                    variant="ghost"
                     title="Discard new note"
                     aria-label="Discard new note"
                     icon={<CloseIcon />}
@@ -95,7 +100,7 @@ const Job = ({ job }: { job: JobInfo }) => {
             {newNote !== null && (
                 <Textarea placeholder="Enter note here..." value={newNote} onChange={handleChangeMessage} />
             )}
-            {renderNotes()}
+            <Stack>{renderNotes()}</Stack>
         </Stack>
     );
 };
