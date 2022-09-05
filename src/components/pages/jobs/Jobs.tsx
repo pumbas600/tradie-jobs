@@ -12,10 +12,10 @@ type SortedBy = 'created' | 'status' | 'id' | 'name' | 'client';
 
 const comparators: Record<SortedBy, Comparator<JobInfo>> = {
     created: (a, b) => a.created.getTime() - b.created.getTime(),
-    status: (a, b) => a.status.localeCompare(b.status),
-    id: (a, b) => a.id.localeCompare(b.id),
-    name: (a, b) => a.name.localeCompare(b.name),
-    client: (a, b) => a.client.name.localeCompare(b.client.name),
+    status: (a, b) => -a.status.localeCompare(b.status),
+    id: (a, b) => -a.id.localeCompare(b.id),
+    name: (a, b) => -a.name.localeCompare(b.name),
+    client: (a, b) => -a.client.name.localeCompare(b.client.name),
 };
 
 const Jobs = () => {
