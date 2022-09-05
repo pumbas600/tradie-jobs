@@ -5,9 +5,9 @@ const StatusTag = ({ status }: { status: Status }) => {
     const colours: Record<Status, string> = {
         [Status.Active]: 'green.500',
         [Status.Completed]: 'blue.600',
-        [Status.Invoicing]: 'blue.400',
-        [Status.Scheduled]: 'orange.400',
-        [Status.ToPrice]: 'orange.600',
+        [Status.Invoicing]: 'blue.300',
+        [Status.Scheduled]: 'orange.300',
+        [Status.ToPrice]: 'orange.500',
     };
 
     return (
