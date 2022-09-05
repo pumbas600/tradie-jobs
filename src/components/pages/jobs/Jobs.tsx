@@ -1,4 +1,4 @@
-import { Container, Heading, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import { Box, Container, Heading, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import { useState } from 'react';
 import { getAllJobs } from '../../../data/JobManager';
 import JobInfo from '../../../types/JobInfo';
@@ -39,7 +39,9 @@ const Jobs = () => {
                         <Tbody>{visibleJobs.map(renderJobRow)}</Tbody>
                     </Table>
                 </TableContainer>
-                {selectedJob ? <Job job={selectedJob} /> : <Heading color="gray.500">No Selected Job</Heading>}
+                <Box maxW="360px" minW="360px" h="full">
+                    {selectedJob ? <Job job={selectedJob} /> : <Heading color="gray.500">No Selected Job</Heading>}
+                </Box>
             </Stack>
         </Container>
     );
