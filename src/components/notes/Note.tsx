@@ -63,8 +63,8 @@ const EditableControls = ({ canSave }: { canSave: boolean }) => {
         <Flex justifyContent="center">
             <IconButton
                 variant="ghost"
-                title="Edit"
-                aria-label="Edit"
+                title="Edit note"
+                aria-label="Edit note"
                 size="sm"
                 icon={<EditIcon />}
                 {...getEditButtonProps()}

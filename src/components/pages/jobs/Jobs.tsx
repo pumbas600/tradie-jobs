@@ -1,5 +1,5 @@
 import { Box, Container, Heading, Stack, Table, TableContainer, Tbody, Td, Thead, Tr } from '@chakra-ui/react';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { getAllJobs } from '../../../data/JobManager';
 import JobInfo from '../../../types/JobInfo';
 import { SortingDirection } from '../../../types/Sorting';
@@ -21,7 +21,7 @@ const comparators: Record<SortedBy, Comparator<JobInfo>> = {
 const Jobs = () => {
     const [visibleJobs, setVisibleJobs] = useState(getAllJobs());
     const [selectedJob, setSelectedJob] = useState<JobInfo | null>(null);
-    const [sortedBy, setSortedBy] = useState<SortedBy>('created');
+    const [sortedBy, setSortedBy] = useState<SortedBy>('id');
     const [direction, setDirection] = useState<SortingDirection>('desc');
 
     const handleChangeSort = (by: SortedBy, direction: SortingDirection) => {
