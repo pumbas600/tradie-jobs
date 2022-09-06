@@ -2,14 +2,12 @@ import { Box, Container, Heading, Stack, Table, TableContainer, Tbody, Td, Thead
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { generateRandomJobs, getAllJobs, getSelectedJob, setSelectedJob } from '../../../redux/slices/JobManager.slice';
+import { getSorting, getVisibleJobs, setSorting, setVisibleJobs } from '../../../redux/slices/Sorting.slice';
 import JobInfo from '../../../types/JobInfo';
-import { SortingDirection } from '../../../types/Sorting';
+import { Comparator, SortedBy, SortingDirection } from '../../../types/Sorting';
 import Sortable, { SortableProps } from '../../headers/Sortable';
 import StatusTag from '../../status/StatusTag';
 import Job from './Job';
-
-type Comparator<T> = (a: T, b: T) => number;
-type SortedBy = 'created' | 'status' | 'id' | 'name' | 'client';
 
 const comparators: Record<SortedBy, Comparator<JobInfo>> = {
     created: (a, b) => a.created - b.created,
@@ -23,25 +21,12 @@ const Jobs = () => {
     const dispatch = useDispatch();
     const allJobs = useSelector(getAllJobs);
     const selectedJob = useSelector(getSelectedJob);
-
-    const [visibleJobs, setVisibleJobs] = useState(allJobs);
-    const [sortedBy, setSortedBy] = useState<SortedBy>('created');
-    const [direction, setDirection] = useState<SortingDirection>('desc');
-
-    useEffect(() => {
-        if (allJobs.length === 0) {
-            dispatch(generateRandomJobs(5));
-        }
-    }, [dispatch, allJobs]);
-
-    useEffect(() => {
-        setVisibleJobs(allJobs);
-    }, [allJobs]);
+    const sorting = useSelector(getSorting);
+    const visibleJobs = useSelector(getVisibleJobs);
 
     const handleChangeSort = (by: SortedBy, direction: SortingDirection) => {
-        setSortedBy(by);
-        setDirection(direction);
         applySorting(by, direction);
+        dispatch(setSorting({ by, direction }));
     };
 
     const applySorting = (by: SortedBy, direction: SortingDirection) => {
@@ -49,13 +34,15 @@ const Jobs = () => {
             direction === 'asc' ? comparators[by] : (a, b) => -comparators[by](a, b);
 
         const sortedJobs = [...visibleJobs];
-        sortedJobs.sort(comparator);
-        setVisibleJobs(sortedJobs);
+        sortedJobs.sort((a, b) => comparator(allJobs[a], allJobs[b]));
+        dispatch(setVisibleJobs(sortedJobs));
     };
 
-    const renderJobRow = (job: JobInfo) => {
+    const renderJobRow = (jobId: string) => {
+        const job = allJobs[jobId];
+
         return (
-            <Tr key={job.id} onClick={() => dispatch(setSelectedJob(job.id))} sx={{ _hover: { bg: 'gray.100' } }}>
+            <Tr key={jobId} onClick={() => dispatch(setSelectedJob(jobId))} sx={{ _hover: { bg: 'gray.100' } }}>
                 <Td py={2}>
                     <StatusTag status={job.status} />
                 </Td>
@@ -68,7 +55,7 @@ const Jobs = () => {
 
     const getSortableProps = (property: SortedBy): SortableProps => {
         return {
-            isApplied: property === sortedBy,
+            isApplied: property === sorting.by,
             handleApply: (direction) => handleChangeSort(property, direction),
         };
     };

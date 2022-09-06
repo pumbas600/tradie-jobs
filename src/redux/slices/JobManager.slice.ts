@@ -35,6 +35,7 @@ const jobManagerSlice = createSlice({
                     const job = { ...generatedJob, id: generateJobId(state, generatedJob.client) };
                     state.jobs[job.id] = job;
                 });
+            console.log('Created jobs');
         },
         addJob(state, action: { payload: Omit<JobInfo, 'id' | 'created'> }) {
             const newJob = {
@@ -81,7 +82,7 @@ const jobManagerSlice = createSlice({
 export const { generateRandomJobs, addJob, setSelectedJob, addNote, updateNote, deleteNote, updateStatus } =
     jobManagerSlice.actions;
 
-export const getAllJobs = (state: StoreState) => Object.values(state.jobManager.jobs);
+export const getAllJobs = (state: StoreState) => state.jobManager.jobs;
 
 export const getSelectedJob = (state: StoreState) =>
     state.jobManager.selectedJob === null ? null : state.jobManager.jobs[state.jobManager.selectedJob];
