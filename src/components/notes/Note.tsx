@@ -7,7 +7,6 @@ import {
     Flex,
     IconButton,
     Stack,
-    useEditable,
     useEditableControls,
 } from '@chakra-ui/react';
 import { useState } from 'react';

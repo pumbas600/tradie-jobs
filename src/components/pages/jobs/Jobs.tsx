@@ -1,12 +1,11 @@
 import { Box, Container, Heading, Stack, Table, TableContainer, Tbody, Td, Thead, Tr } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { generateRandomJobs, getAllJobs, getSelectedJob, setSelectedJob } from '../../../redux/slices/JobManager.slice';
+import { getAllJobs, getSelectedJob, setSelectedJob } from '../../../redux/slices/JobManager.slice';
 import { getSorting, getVisibleJobs, setSorting, setVisibleJobs } from '../../../redux/slices/Sorting.slice';
-import JobInfo from '../../../types/JobInfo';
 import { Comparator, SortedBy, SortingDirection } from '../../../types/Sorting';
 import Sortable, { SortableProps } from '../../headers/Sortable';
 import StatusTag from '../../status/StatusTag';
+import JobInfo from '../../../types/JobInfo';
 import Job from './Job';
 
 const comparators: Record<SortedBy, Comparator<JobInfo>> = {
