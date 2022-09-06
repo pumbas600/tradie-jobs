@@ -7,6 +7,7 @@ import {
     Flex,
     IconButton,
     Stack,
+    useEditable,
     useEditableControls,
 } from '@chakra-ui/react';
 import { useState } from 'react';
@@ -27,6 +28,7 @@ const Note = ({ index, note }: { index: number; note: NoteInfo }) => {
 
     return (
         <Editable
+            itemRef=""
             defaultValue={newValue}
             isPreviewFocusable={false}
             onChange={(value) => setNewValue(value)}
@@ -70,6 +72,7 @@ const EditableControls = ({ canSave, handleDelete }: { canSave: boolean; handleD
                 aria-label="Delete note"
                 icon={<DeleteIcon />}
                 size="xs"
+                {...getSubmitButtonProps()}
                 onClick={handleDelete}
             />
         </Stack>
