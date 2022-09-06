@@ -51,7 +51,8 @@ const jobManagerSlice = createSlice({
         },
         addNote(state, action: { payload: NoteInfo }) {
             if (state.selectedJob !== null) {
-                state.jobs[state.selectedJob].notes.push(action.payload);
+                // Add note at the start of the array
+                state.jobs[state.selectedJob].notes.unshift(action.payload);
             }
         },
         updateNote(state, action: { payload: { noteIndex: number; newMessage: string } }) {
