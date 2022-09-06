@@ -62,6 +62,14 @@ const jobManagerSlice = createSlice({
                 job.notes[action.payload.noteIndex].message = action.payload.newMessage;
             }
         },
+        deleteNote(state, action: { payload: number }) {
+            if (state.selectedJob === null) return;
+
+            const job = state.jobs[state.selectedJob];
+            if (action.payload >= 0 && action.payload < job.notes.length) {
+                job.notes.splice(action.payload, 1);
+            }
+        },
         updateStatus(state, action: { payload: Status }) {
             if (state.selectedJob !== null) {
                 state.jobs[state.selectedJob].status = action.payload;
@@ -70,7 +78,7 @@ const jobManagerSlice = createSlice({
     },
 });
 
-export const { generateRandomJobs, addJob, setSelectedJob, addNote, updateNote, updateStatus } =
+export const { generateRandomJobs, addJob, setSelectedJob, addNote, updateNote, deleteNote, updateStatus } =
     jobManagerSlice.actions;
 
 export const getAllJobs = (state: StoreState) => Object.values(state.jobManager.jobs);
