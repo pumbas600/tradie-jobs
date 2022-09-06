@@ -1,3 +1,5 @@
+import { ThemeTypings } from '@chakra-ui/react';
+
 export function capitalise(str: string): string {
     return str.slice(0, 1).toUpperCase() + str.slice(1);
 }
@@ -30,4 +32,20 @@ export function randomEnum<T extends {}>(anEnum: T): T[keyof T] {
 
 export function allValues<T extends {}>(anEnum: T): T[keyof T][] {
     return Object.values(anEnum) as unknown as T[keyof T][];
+}
+
+export function asCssVar(colour: ThemeTypings['colors']): string {
+    const modified = colour.replaceAll('.', '-');
+    return `var(--chakra-colors-${modified})`;
+}
+
+export function darken(colour: ThemeTypings['colors'], amount = 100): ThemeTypings['colors'] {
+    const split = colour.split('.', 2);
+    if (split.length !== 2) return colour;
+
+    const shade = Number.parseInt(split[1]);
+    if (isNaN(shade)) return colour;
+
+    // Increase the shade by a specific amount
+    return `${split[0]}.${shade + amount}`;
 }

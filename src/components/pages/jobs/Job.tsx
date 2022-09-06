@@ -1,9 +1,11 @@
-import { PhoneIcon, EmailIcon, AddIcon, CloseIcon, CheckIcon } from '@chakra-ui/icons';
-import { Box, IconButton, Stack, Text, Textarea } from '@chakra-ui/react';
+import { PhoneIcon, EmailIcon, AddIcon, CloseIcon, CheckIcon, ChevronDownIcon } from '@chakra-ui/icons';
+import { Box, Button, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, Text, Textarea } from '@chakra-ui/react';
 import { ReactNode, useEffect, useState } from 'react';
-import JobInfo from '../../../types/JobInfo';
+import JobInfo, { Status } from '../../../types/JobInfo';
 import StatusTag from '../../status/StatusTag';
 import Note from '../../notes/Note';
+import { allValues } from '../../../helpers/Utilities';
+import StatusMenu from '../../status/StatusMenu';
 
 const Job = ({ job }: { job: JobInfo }) => {
     const [newNote, setNewNote] = useState<string | null>(null);
@@ -28,6 +30,12 @@ const Job = ({ job }: { job: JobInfo }) => {
         if (e.key === 'Escape') {
             setNewNote(null);
         }
+    };
+
+    const handleChangeStatus = (newStatus: Status) => {
+        console.log(newStatus);
+        // Jobs are passed by reference.
+        job.status = newStatus;
     };
 
     const renderContactInfo = (icon: ReactNode, label: string): ReactNode => {
@@ -87,7 +95,7 @@ const Job = ({ job }: { job: JobInfo }) => {
                         {job.id}
                     </Text>
                 </Stack>
-                <StatusTag status={job.status} />
+                <StatusMenu status={job.status} handleChange={handleChangeStatus} />
             </Stack>
             <Text>
                 {job.created.toLocaleDateString(undefined, {

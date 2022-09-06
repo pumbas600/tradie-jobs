@@ -53,7 +53,6 @@ function randomNotes(): NoteInfo[] {
 
 export function randomJob(): JobInfo {
     const wordsInName = randBetween(2, 4);
-    console.log(wordsInName);
 
     const client = randomClient();
     return {
