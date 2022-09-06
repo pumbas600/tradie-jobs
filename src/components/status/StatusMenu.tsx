@@ -1,4 +1,4 @@
-import { background, Box, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
+import { Box, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { allValues, darken } from '../../helpers/Utilities';
 import { Status } from '../../types/JobInfo';
 import StatusTag, { StatusColours } from './StatusTag';
