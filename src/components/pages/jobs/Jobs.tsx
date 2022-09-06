@@ -7,6 +7,7 @@ import Sortable, { SortableProps } from '../../headers/Sortable';
 import StatusTag from '../../status/StatusTag';
 import JobInfo from '../../../types/JobInfo';
 import Job from './Job';
+import { useEffect } from 'react';
 
 const comparators: Record<SortedBy, Comparator<JobInfo>> = {
     created: (a, b) => a.created - b.created,
@@ -16,12 +17,19 @@ const comparators: Record<SortedBy, Comparator<JobInfo>> = {
     client: (a, b) => -a.client.name.localeCompare(b.client.name),
 };
 
-const Jobs = () => {
+const Jobs = ({ allJobs }: { allJobs: Record<string, JobInfo> }) => {
     const dispatch = useDispatch();
-    const allJobs = useSelector(getAllJobs);
     const selectedJob = useSelector(getSelectedJob);
     const sorting = useSelector(getSorting);
     const visibleJobs = useSelector(getVisibleJobs);
+
+    useEffect(() => {
+        console.log('set visible');
+        console.log(allJobs);
+        dispatch(setVisibleJobs(Object.keys(allJobs)));
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch]);
 
     const handleChangeSort = (by: SortedBy, direction: SortingDirection) => {
         applySorting(by, direction);

@@ -35,7 +35,6 @@ const jobManagerSlice = createSlice({
                     const job = { ...generatedJob, id: generateJobId(state, generatedJob.client) };
                     state.jobs[job.id] = job;
                 });
-            console.log('Created jobs');
         },
         addJob(state, action: { payload: Omit<JobInfo, 'id' | 'created'> }) {
             const newJob = {
