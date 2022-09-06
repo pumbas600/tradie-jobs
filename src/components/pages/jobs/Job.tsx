@@ -2,6 +2,7 @@ import { PhoneIcon, EmailIcon, AddIcon, CloseIcon, CheckIcon } from '@chakra-ui/
 import { Box, IconButton, Stack, Text, Textarea } from '@chakra-ui/react';
 import { ReactNode, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { addNote, updateStatus } from '../../../redux/slices/JobManager.slice';
 import JobInfo, { Status } from '../../../types/JobInfo';
 import Note from '../../notes/Note';
 import StatusMenu from '../../status/StatusMenu';
@@ -20,8 +21,8 @@ const Job = ({ job }: { job: JobInfo }) => {
     };
 
     const handleSaveNewNote = () => {
-        // Jobs are passed by reference. This will also only be called if there is a non-empty message
-        job.notes.push({ message: newNote!.trim(), created: new Date().getTime() });
+        // This will also only be called if there is a non-empty message
+        dispatch(addNote({ message: newNote!.trim(), created: new Date().getTime() }));
         setNewNote(null);
     };
 
@@ -33,9 +34,7 @@ const Job = ({ job }: { job: JobInfo }) => {
     };
 
     const handleChangeStatus = (newStatus: Status) => {
-        console.log(newStatus);
-        // Jobs are passed by reference.
-        job.status = newStatus;
+        dispatch(updateStatus(newStatus));
     };
 
     const renderContactInfo = (icon: ReactNode, label: string): ReactNode => {
@@ -47,7 +46,7 @@ const Job = ({ job }: { job: JobInfo }) => {
     };
 
     const renderNotes = (): ReactNode => {
-        return job.notes.map((note) => <Note key={note.created} note={note} />);
+        return job.notes.map((note, index) => <Note key={note.created} index={index} note={note} />);
     };
 
     const renderNoteButtons = (): ReactNode => {

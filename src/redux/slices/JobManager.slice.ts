@@ -62,9 +62,9 @@ const jobManagerSlice = createSlice({
                 job.notes[action.payload.noteIndex].message = action.payload.newMessage;
             }
         },
-        updateStatus(state, action: { payload: { newStatus: Status } }) {
+        updateStatus(state, action: { payload: Status }) {
             if (state.selectedJob !== null) {
-                state.jobs[state.selectedJob].status = action.payload.newStatus;
+                state.jobs[state.selectedJob].status = action.payload;
             }
         },
     },

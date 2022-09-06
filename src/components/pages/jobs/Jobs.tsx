@@ -1,8 +1,7 @@
 import { Box, Container, Heading, Stack, Table, TableContainer, Tbody, Td, Thead, Tr } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllJobs } from '../../../data/JobManager';
-import { generateRandomJobs, getSelectedJob, setSelectedJob } from '../../../redux/slices/JobManager.slice';
+import { generateRandomJobs, getAllJobs, getSelectedJob, setSelectedJob } from '../../../redux/slices/JobManager.slice';
 import JobInfo from '../../../types/JobInfo';
 import { SortingDirection } from '../../../types/Sorting';
 import Sortable, { SortableProps } from '../../headers/Sortable';
@@ -30,10 +29,14 @@ const Jobs = () => {
     const [direction, setDirection] = useState<SortingDirection>('desc');
 
     useEffect(() => {
-        // if (allJobs.length === 0) {
-        //     dispatch(generateRandomJobs(5));
-        // }
+        if (allJobs.length === 0) {
+            dispatch(generateRandomJobs(5));
+        }
     }, [dispatch, allJobs]);
+
+    useEffect(() => {
+        setVisibleJobs(allJobs);
+    }, [allJobs]);
 
     const handleChangeSort = (by: SortedBy, direction: SortingDirection) => {
         setSortedBy(by);

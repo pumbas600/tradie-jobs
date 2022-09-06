@@ -10,13 +10,15 @@ import {
     useEditableControls,
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { updateNote } from '../../redux/slices/JobManager.slice';
 
-const Note = ({ note }: { note: NoteInfo }) => {
+const Note = ({ index, note }: { index: number; note: NoteInfo }) => {
+    const dispatch = useDispatch();
     const [newValue, setNewValue] = useState(note.message);
 
     const handleUpdateMessage = (newMessage: string) => {
-        // Notes are passed by reference
-        note.message = newMessage;
+        dispatch(updateNote({ noteIndex: index, newMessage }));
     };
 
     return (
