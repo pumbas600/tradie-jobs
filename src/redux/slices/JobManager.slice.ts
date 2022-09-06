@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { randomJob } from '../../data/DataPopulator';
 import Client from '../../types/Client';
 import JobInfo, { Status } from '../../types/JobInfo';
 import NoteInfo from '../../types/NoteInfo';
@@ -26,6 +27,15 @@ const jobManagerSlice = createSlice({
     name: 'jobmanager',
     initialState,
     reducers: {
+        generateRandomJobs(state, action: { payload: number }) {
+            Array(action.payload)
+                .fill(null)
+                .forEach(() => {
+                    const generatedJob = randomJob();
+                    const job = { ...generatedJob, id: generateJobId(state, generatedJob.client) };
+                    state.jobs[job.id] = job;
+                });
+        },
         addJob(state, action: { payload: Omit<JobInfo, 'id' | 'created'> }) {
             const newJob = { ...action.payload, id: generateJobId(state, action.payload.client), created: new Date() };
             state.jobs[newJob.id] = newJob;
@@ -56,7 +66,8 @@ const jobManagerSlice = createSlice({
     },
 });
 
-export const { addJob, setSelectedJob } = jobManagerSlice.actions;
+export const { generateRandomJobs, addJob, setSelectedJob, addNote, updateNote, updateStatus } =
+    jobManagerSlice.actions;
 
 export const getAllJobs = (state: StoreState) => Object.values(state.jobManager.jobs);
 

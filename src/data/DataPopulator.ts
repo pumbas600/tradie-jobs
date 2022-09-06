@@ -51,12 +51,11 @@ function randomNotes(): NoteInfo[] {
         }));
 }
 
-export function randomJob(): JobInfo {
+export function randomJob(): Omit<JobInfo, 'id'> {
     const wordsInName = randBetween(2, 4);
 
     const client = randomClient();
     return {
-        id: generateJobId(client),
         name: capitalise(lorem.generateWords(wordsInName)),
         status: randomEnum(Status),
         created: randomDate(),

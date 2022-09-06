@@ -1,16 +1,8 @@
 import Client from '../types/Client';
 import JobInfo from '../types/JobInfo';
-import { randomJob } from './DataPopulator';
 
 let jobIdCounter = 0;
 const jobs: Record<string, JobInfo> = {};
-
-Array(5)
-    .fill(null)
-    .forEach(() => {
-        const job = randomJob();
-        jobs[job.id] = job;
-    });
 
 export function getAllJobs(): JobInfo[] {
     return Object.values(jobs);
