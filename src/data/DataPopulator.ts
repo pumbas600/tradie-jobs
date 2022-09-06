@@ -3,7 +3,6 @@ import { capitalise, randBetween, randint, randomEnum } from '../helpers/Utiliti
 import Client from '../types/Client';
 import JobInfo, { Status } from '../types/JobInfo';
 import NoteInfo from '../types/NoteInfo';
-import { generateJobId } from './JobManager';
 
 const lorem = new LoremIpsum({
     sentencesPerParagraph: {
@@ -31,10 +30,9 @@ const clients: Client[] = [
     },
 ];
 
-function randomDate(): Date {
+function randomDate(): number {
     // Generate a random date between now and the earliest possible created date
-    const time = randBetween(Date.now(), earliestCreated);
-    return new Date(time);
+    return randBetween(Date.now(), earliestCreated);
 }
 
 function randomClient(): Client {

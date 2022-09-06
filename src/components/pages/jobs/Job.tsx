@@ -1,11 +1,13 @@
 import { PhoneIcon, EmailIcon, AddIcon, CloseIcon, CheckIcon } from '@chakra-ui/icons';
 import { Box, IconButton, Stack, Text, Textarea } from '@chakra-ui/react';
 import { ReactNode, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import JobInfo, { Status } from '../../../types/JobInfo';
 import Note from '../../notes/Note';
 import StatusMenu from '../../status/StatusMenu';
 
 const Job = ({ job }: { job: JobInfo }) => {
+    const dispatch = useDispatch();
     const [newNote, setNewNote] = useState<string | null>(null);
 
     useEffect(() => {
@@ -19,7 +21,7 @@ const Job = ({ job }: { job: JobInfo }) => {
 
     const handleSaveNewNote = () => {
         // Jobs are passed by reference. This will also only be called if there is a non-empty message
-        job.notes.push({ message: newNote!.trim(), created: new Date() });
+        job.notes.push({ message: newNote!.trim(), created: new Date().getTime() });
         setNewNote(null);
     };
 
@@ -45,7 +47,7 @@ const Job = ({ job }: { job: JobInfo }) => {
     };
 
     const renderNotes = (): ReactNode => {
-        return job.notes.map((note) => <Note key={note.created.getTime()} note={note} />);
+        return job.notes.map((note) => <Note key={note.created} note={note} />);
     };
 
     const renderNoteButtons = (): ReactNode => {
@@ -96,7 +98,7 @@ const Job = ({ job }: { job: JobInfo }) => {
                 <StatusMenu status={job.status} handleChange={handleChangeStatus} />
             </Stack>
             <Text>
-                {job.created.toLocaleDateString(undefined, {
+                {new Date(job.created).toLocaleDateString(undefined, {
                     hour: 'numeric',
                     day: 'numeric',
                     month: 'short',

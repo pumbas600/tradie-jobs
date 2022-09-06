@@ -1,6 +1,8 @@
 import { Box, Container, Heading, Stack, Table, TableContainer, Tbody, Td, Thead, Tr } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { getAllJobs } from '../../../data/JobManager';
+import { generateRandomJobs, getSelectedJob, setSelectedJob } from '../../../redux/slices/JobManager.slice';
 import JobInfo from '../../../types/JobInfo';
 import { SortingDirection } from '../../../types/Sorting';
 import Sortable, { SortableProps } from '../../headers/Sortable';
@@ -11,7 +13,7 @@ type Comparator<T> = (a: T, b: T) => number;
 type SortedBy = 'created' | 'status' | 'id' | 'name' | 'client';
 
 const comparators: Record<SortedBy, Comparator<JobInfo>> = {
-    created: (a, b) => a.created.getTime() - b.created.getTime(),
+    created: (a, b) => a.created - b.created,
     status: (a, b) => -a.status.localeCompare(b.status),
     id: (a, b) => -a.id.localeCompare(b.id),
     name: (a, b) => -a.name.localeCompare(b.name),
@@ -19,10 +21,19 @@ const comparators: Record<SortedBy, Comparator<JobInfo>> = {
 };
 
 const Jobs = () => {
-    const [visibleJobs, setVisibleJobs] = useState(getAllJobs());
-    const [selectedJob, setSelectedJob] = useState<JobInfo | null>(null);
+    const dispatch = useDispatch();
+    const allJobs = useSelector(getAllJobs);
+    const selectedJob = useSelector(getSelectedJob);
+
+    const [visibleJobs, setVisibleJobs] = useState(allJobs);
     const [sortedBy, setSortedBy] = useState<SortedBy>('created');
     const [direction, setDirection] = useState<SortingDirection>('desc');
+
+    useEffect(() => {
+        // if (allJobs.length === 0) {
+        //     dispatch(generateRandomJobs(5));
+        // }
+    }, [dispatch, allJobs]);
 
     const handleChangeSort = (by: SortedBy, direction: SortingDirection) => {
         setSortedBy(by);
@@ -41,7 +52,7 @@ const Jobs = () => {
 
     const renderJobRow = (job: JobInfo) => {
         return (
-            <Tr key={job.id} onClick={() => setSelectedJob(job)} sx={{ _hover: { bg: 'gray.100' } }}>
+            <Tr key={job.id} onClick={() => dispatch(setSelectedJob(job.id))} sx={{ _hover: { bg: 'gray.100' } }}>
                 <Td py={2}>
                     <StatusTag status={job.status} />
                 </Td>

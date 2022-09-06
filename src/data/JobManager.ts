@@ -9,7 +9,7 @@ export function getAllJobs(): JobInfo[] {
 }
 
 export function addJob(job: Omit<JobInfo, 'id' | 'created'>): JobInfo {
-    const newJob = { ...job, id: generateJobId(job.client), created: new Date() };
+    const newJob = { ...job, id: generateJobId(job.client), created: new Date().getTime() };
     jobs[newJob.id] = newJob;
     return newJob;
 }
