@@ -12,35 +12,15 @@ import { Comparator, SortedBy, SortingInfo } from '../../../types/Sorting';
 import { ReactNode, useCallback, useEffect } from 'react';
 import Sortable from '../../tableheaders/Sortable';
 import StatusTag from '../../status/StatusTag';
-import JobInfo from '../../../types/JobInfo';
+import JobInfo, { Status } from '../../../types/JobInfo';
 import Job from './Job';
 import Content from '../../Content';
 import Header from '../../header';
 import SearchBar from '../../searchbar';
-import Filterable from '../../tableheaders/Filterable';
+import Filterable, { FilterOption } from '../../tableheaders/Filterable';
+import { allValues, capitalise } from '../../../helpers/Utilities';
 
-type TableColumn = { property: SortedBy; label: string; filterable?: boolean };
-
-const tableColumns: TableColumn[] = [
-    {
-        property: 'status',
-        label: 'Status',
-        filterable: true,
-    },
-    {
-        property: 'id',
-        label: 'ID',
-    },
-    {
-        property: 'name',
-        label: 'Name',
-    },
-    {
-        property: 'client',
-        label: 'Client',
-        filterable: true,
-    },
-];
+type TableColumn = { property: SortedBy; label?: string };
 
 const comparators: Record<SortedBy, Comparator<JobInfo>> = {
     created: (a, b) => a.created - b.created,
@@ -49,6 +29,11 @@ const comparators: Record<SortedBy, Comparator<JobInfo>> = {
     name: (a, b) => -a.name.localeCompare(b.name),
     client: (a, b) => -a.client.name.localeCompare(b.client.name),
 };
+
+const statusFilterOptions: FilterOption[] = allValues(Status).map((status) => ({
+    value: status,
+    render: <StatusTag status={status} />,
+}));
 
 const Jobs = ({ allJobs }: { allJobs: Record<string, JobInfo> }) => {
     const dispatch = useDispatch();
@@ -114,23 +99,13 @@ const Jobs = ({ allJobs }: { allJobs: Record<string, JobInfo> }) => {
     };
 
     const renderColumnLabel = (column: TableColumn): ReactNode => {
-        let reactNode = (
+        return (
             <Sortable
                 isApplied={column.property === sorting.by}
                 handleApply={(direction) => handleChangeSort({ by: column.property, direction })}
             >
-                {column.label}
+                {column.label ?? capitalise(column.property)}
             </Sortable>
-        );
-
-        if (column.filterable) {
-            reactNode = <Filterable filterOptions={[]}>{reactNode}</Filterable>;
-        }
-
-        return (
-            <Th key={column.property} py={2}>
-                {reactNode}
-            </Th>
         );
     };
 
@@ -144,7 +119,16 @@ const Jobs = ({ allJobs }: { allJobs: Record<string, JobInfo> }) => {
                     <TableContainer w="full">
                         <Table variant="simple" size="md">
                             <Thead>
-                                <Tr>{tableColumns.map(renderColumnLabel)}</Tr>
+                                <Tr>
+                                    <Th py={2}>
+                                        <Filterable filterOptions={statusFilterOptions}>
+                                            {renderColumnLabel({ property: 'status' })}
+                                        </Filterable>
+                                    </Th>
+                                    <Th py={2}>{renderColumnLabel({ property: 'id', label: 'ID' })}</Th>
+                                    <Th py={2}>{renderColumnLabel({ property: 'name' })}</Th>
+                                    <Th py={2}>{renderColumnLabel({ property: 'client' })}</Th>
+                                </Tr>
                             </Thead>
                             <Tbody>{visibleJobs.map(renderJobRow)}</Tbody>
                         </Table>
