@@ -12,33 +12,41 @@ import {
     Text,
 } from '@chakra-ui/react';
 import { FaFilter } from 'react-icons/fa';
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 
-export interface FilterOption {
-    value: string;
+export interface FilterOption<T> {
+    value: T;
     render: ReactNode;
 }
 
-const Filterable = ({ children, filterOptions }: { children?: ReactNode; filterOptions: FilterOption[] }) => {
-    const [filters, setFilters] = useState<string[]>(filterOptions.map((option) => option.value));
-
+function Filterable<T extends string>({
+    children,
+    filterOptions,
+    filters,
+    handleChangeFilters,
+}: {
+    children?: ReactNode;
+    filterOptions: FilterOption<T>[];
+    filters: T[];
+    handleChangeFilters(newFilters: T[]): void;
+}) {
     const isApplied = filters.length !== filterOptions.length;
     const allChecked = filters.length === filterOptions.length;
     const isIndeterminate = filters.length !== 0 && isApplied;
 
-    const handleFilter = (value: string, filtered: boolean) => {
+    const handleFilter = (value: T, filtered: boolean) => {
         if (filtered) {
-            setFilters([...filters, value]);
+            handleChangeFilters([...filters, value]);
         } else {
-            setFilters(filters.filter((filter) => filter !== value));
+            handleChangeFilters(filters.filter((filter) => filter !== value));
         }
     };
 
     const setAllFilters = (filtered: boolean) => {
         if (filtered) {
-            setFilters(filterOptions.map((option) => option.value));
+            handleChangeFilters(filterOptions.map((option) => option.value));
         } else {
-            setFilters([]);
+            handleChangeFilters([]);
         }
     };
 
@@ -89,6 +97,6 @@ const Filterable = ({ children, filterOptions }: { children?: ReactNode; filterO
             </Popover>
         </Flex>
     );
-};
+}
 
 export default Filterable;

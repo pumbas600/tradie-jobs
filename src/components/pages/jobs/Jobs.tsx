@@ -6,6 +6,7 @@ import {
     getSorting,
     getVisibleJobs,
     setSorting,
+    setStatusFilters,
     setVisibleJobs,
 } from '../../../redux/slices/Sorting.slice';
 import { Comparator, SortedBy, SortingInfo } from '../../../types/Sorting';
@@ -30,7 +31,7 @@ const comparators: Record<SortedBy, Comparator<JobInfo>> = {
     client: (a, b) => -a.client.name.localeCompare(b.client.name),
 };
 
-const statusFilterOptions: FilterOption[] = allValues(Status).map((status) => ({
+const statusFilterOptions: FilterOption<Status>[] = allValues(Status).map((status) => ({
     value: status,
     render: <StatusTag status={status} />,
 }));
@@ -70,6 +71,9 @@ const Jobs = ({ allJobs }: { allJobs: Record<string, JobInfo> }) => {
                     allJobs[id].id.toLowerCase().includes(loweredSearch)
                 );
             });
+        }
+        if (filters.status.length !== statusFilterOptions.length) {
+            filteredJobs = filteredJobs.filter((id) => filters.status.includes(allJobs[id].status));
         }
         applySorting(sorting, filteredJobs);
     }, [filters, sorting, allJobs, applySorting]);
@@ -120,8 +124,12 @@ const Jobs = ({ allJobs }: { allJobs: Record<string, JobInfo> }) => {
                         <Table variant="simple" size="md">
                             <Thead>
                                 <Tr>
-                                    <Th py={2}>
-                                        <Filterable filterOptions={statusFilterOptions}>
+                                    <Th py={2} w="170px">
+                                        <Filterable
+                                            filters={filters.status}
+                                            filterOptions={statusFilterOptions}
+                                            handleChangeFilters={(newFilters) => dispatch(setStatusFilters(newFilters))}
+                                        >
                                             {renderColumnLabel({ property: 'status' })}
                                         </Filterable>
                                     </Th>

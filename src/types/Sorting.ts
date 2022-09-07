@@ -1,3 +1,5 @@
+import { Status } from './JobInfo';
+
 export type SortingDirection = 'asc' | 'desc';
 
 export type SortedBy = 'created' | 'status' | 'id' | 'name' | 'client';
@@ -11,4 +13,5 @@ export interface SortingInfo {
 
 export interface Filters {
     search: string;
+    status: Status[];
 }
