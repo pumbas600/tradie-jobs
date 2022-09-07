@@ -8,11 +8,11 @@ The UI is populated using 10 randomly generated jobs. These jobs will be regener
 
 ## Tech stack
 
-<div align="centre">
+<div align="center">
 <img src="https://img.shields.io/badge/react-%2361DAFB.svg?&style=for-the-badge&logo=react&logoColor=black" />
 <img src="https://img.shields.io/badge/chakra%20ui-%23319795.svg?&style=for-the-badge&logo=chakra%20ui&logoColor=white" />
 <img src="https://img.shields.io/badge/typescript-%233178C6.svg?&style=for-the-badge&logo=typescript&logoColor=white" />
-	<img src="https://img.shields.io/badge/redux-%23764ABC.svg?&style=for-the-badge&logo=redux&logoColor=white" />
+<img src="https://img.shields.io/badge/redux-%23764ABC.svg?&style=for-the-badge&logo=redux&logoColor=white" />
 </div>
 
 ## Installation
