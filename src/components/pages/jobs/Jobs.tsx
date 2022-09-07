@@ -1,10 +1,11 @@
-import { Box, Heading, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import { Box, Heading, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSelectedJob, setSelectedJob } from '../../../redux/slices/JobManager.slice';
 import {
     getFilters,
     getSorting,
     getVisibleJobs,
+    setClientFilters,
     setSorting,
     setStatusFilters,
     setVisibleJobs,
@@ -20,6 +21,7 @@ import Header from '../../header';
 import SearchBar from '../../searchbar';
 import Filterable, { FilterOption } from '../../tableheaders/Filterable';
 import { allValues, capitalise } from '../../../helpers/Utilities';
+import Client from '../../../types/Client';
 
 type TableColumn = { property: SortedBy; label?: string };
 
@@ -36,16 +38,21 @@ const statusFilterOptions: FilterOption<Status>[] = allValues(Status).map((statu
     render: <StatusTag status={status} />,
 }));
 
-const Jobs = ({ allJobs }: { allJobs: Record<string, JobInfo> }) => {
+const Jobs = ({ allJobs, allClients }: { allJobs: Record<string, JobInfo>; allClients: Record<string, Client> }) => {
     const dispatch = useDispatch();
     const selectedJob = useSelector(getSelectedJob);
     const visibleJobs = useSelector(getVisibleJobs);
     const sorting = useSelector(getSorting);
     const filters = useSelector(getFilters);
 
+    const clientFilterOptions: FilterOption[] = Object.values(allClients).map((client) => ({
+        value: client.clientCode,
+        render: <Text>{client.name}</Text>,
+    }));
+
     useEffect(() => {
         dispatch(setVisibleJobs(Object.keys(allJobs)));
-
+        dispatch(setClientFilters(Object.keys(allClients)));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
 
@@ -135,7 +142,15 @@ const Jobs = ({ allJobs }: { allJobs: Record<string, JobInfo> }) => {
                                     </Th>
                                     <Th py={2}>{renderColumnLabel({ property: 'id', label: 'ID' })}</Th>
                                     <Th py={2}>{renderColumnLabel({ property: 'name' })}</Th>
-                                    <Th py={2}>{renderColumnLabel({ property: 'client' })}</Th>
+                                    <Th py={2}>
+                                        <Filterable
+                                            filters={filters.client}
+                                            filterOptions={clientFilterOptions}
+                                            handleChangeFilters={(newFilters) => dispatch(setClientFilters(newFilters))}
+                                        >
+                                            {renderColumnLabel({ property: 'client' })}
+                                        </Filterable>
+                                    </Th>
                                 </Tr>
                             </Thead>
                             <Tbody>{visibleJobs.map(renderJobRow)}</Tbody>

@@ -14,7 +14,7 @@ import {
 import { FaFilter } from 'react-icons/fa';
 import { ReactNode } from 'react';
 
-export interface FilterOption<T> {
+export interface FilterOption<T = string> {
     value: T;
     render: ReactNode;
 }
@@ -57,6 +57,11 @@ function Filterable<T extends string>({
                     key={option.value}
                     isChecked={filters.includes(option.value)}
                     onChange={(e) => handleFilter(option.value, e.target.checked)}
+                    fontWeight="normal"
+                    color="chakra-body-text"
+                    fontFamily="body"
+                    textTransform="none"
+                    letterSpacing="normal"
                 >
                     {option.render}
                 </Checkbox>

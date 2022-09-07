@@ -14,4 +14,5 @@ export interface SortingInfo {
 export interface Filters {
     search: string;
     status: Status[];
+    client: string[];
 }

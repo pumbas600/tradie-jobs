@@ -19,6 +19,7 @@ export const initialState: State = {
     filters: {
         search: '',
         status: allValues(Status),
+        client: [],
     },
 };
 
@@ -38,10 +39,13 @@ const sortingSlice = createSlice({
         setStatusFilters(state, action: { payload: Status[] }) {
             state.filters.status = action.payload;
         },
+        setClientFilters(state, action: { payload: string[] }) {
+            state.filters.client = action.payload;
+        },
     },
 });
 
-export const { setVisibleJobs, setSorting, setSearchFilter, setStatusFilters } = sortingSlice.actions;
+export const { setVisibleJobs, setSorting, setSearchFilter, setStatusFilters, setClientFilters } = sortingSlice.actions;
 
 export const getSorting = (state: StoreState) => state.sorting.info;
 
