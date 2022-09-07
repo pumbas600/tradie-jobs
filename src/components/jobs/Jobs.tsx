@@ -1,4 +1,4 @@
-import { Box, Heading, Stack, Text } from '@chakra-ui/react';
+import { Box, Stack, Text } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSelectedJob } from '../../redux/slices/JobManager.slice';
 import { setClientFilters, setVisibleJobs } from '../../redux/slices/Sorting.slice';
@@ -13,6 +13,7 @@ import Header from '../header';
 import SearchBar from '../searchbar';
 import Client from '../../types/Client';
 import JobTable from './JobTable';
+import NoSelectedJob from './NoSelectedJob';
 
 const statusFilterOptions: FilterOption<Status>[] = allValues(Status).map((status) => ({
     value: status,
@@ -39,23 +40,23 @@ const Jobs = ({ allJobs, allClients }: { allJobs: Record<string, JobInfo>; allCl
     }, [dispatch]);
 
     return (
-        <Box>
+        <Stack h="100vh" alignItems="center">
             <Header>
                 <SearchBar placeholder="Search by name or id..." />
             </Header>
             <Content>
-                <Stack direction="row" gap={2} mt={5}>
+                <Stack direction="row" gap={2} my={5}>
                     <JobTable
                         allJobs={allJobs}
                         clientFilterOptions={clientFilterOptions}
                         statusFilterOptions={statusFilterOptions}
                     />
                     <Box maxW="360px" minW="360px" h="full">
-                        {selectedJob ? <Job job={selectedJob} /> : <Heading color="gray.600">No Selected Job</Heading>}
+                        {selectedJob ? <Job job={selectedJob} /> : <NoSelectedJob />}
                     </Box>
                 </Stack>
             </Content>
-        </Box>
+        </Stack>
     );
 };
 

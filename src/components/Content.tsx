@@ -1,8 +1,11 @@
-import { Container } from '@chakra-ui/react';
-import { ReactNode } from 'react';
+import { Container, ContainerProps } from '@chakra-ui/react';
 
-const Content = ({ children }: { children?: ReactNode }) => {
-    return <Container maxW="1200px">{children}</Container>;
+const Content = ({ children, ...props }: ContainerProps) => {
+    return (
+        <Container maxW="1200px" {...props}>
+            {children}
+        </Container>
+    );
 };
 
 export default Content;
