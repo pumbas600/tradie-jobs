@@ -6,8 +6,10 @@ import {
     Popover,
     PopoverBody,
     PopoverContent,
+    PopoverHeader,
     PopoverTrigger,
     Stack,
+    Text,
 } from '@chakra-ui/react';
 import { FaFilter } from 'react-icons/fa';
 import { ReactNode, useState } from 'react';
@@ -21,12 +23,22 @@ const Filterable = ({ children, filterOptions }: { children?: ReactNode; filterO
     const [filters, setFilters] = useState<string[]>(filterOptions.map((option) => option.value));
 
     const isApplied = filters.length !== filterOptions.length;
+    const allChecked = filters.length === filterOptions.length;
+    const isIndeterminate = filters.length !== 0 && isApplied;
 
     const handleFilter = (value: string, filtered: boolean) => {
         if (filtered) {
             setFilters([...filters, value]);
         } else {
             setFilters(filters.filter((filter) => filter !== value));
+        }
+    };
+
+    const setAllFilters = (filtered: boolean) => {
+        if (filtered) {
+            setFilters(filterOptions.map((option) => option.value));
+        } else {
+            setFilters([]);
         }
     };
 
@@ -45,7 +57,7 @@ const Filterable = ({ children, filterOptions }: { children?: ReactNode; filterO
     };
 
     return (
-        <Flex flexDirection="row" alignItems="center" justifyContent="space-between">
+        <Flex direction="row" alignItems="center" justifyContent="space-between">
             {children}
             <Popover>
                 <PopoverTrigger>
@@ -59,6 +71,17 @@ const Filterable = ({ children, filterOptions }: { children?: ReactNode; filterO
                     />
                 </PopoverTrigger>
                 <PopoverContent w="min">
+                    <PopoverHeader>
+                        <Stack direction="row">
+                            <Checkbox
+                                isChecked={allChecked}
+                                isIndeterminate={isIndeterminate}
+                                onChange={(e) => setAllFilters(e.target.checked)}
+                                title={!allChecked && isIndeterminate ? 'Check all' : 'Uncheck all'}
+                            />
+                            <Text>Select filters</Text>
+                        </Stack>
+                    </PopoverHeader>
                     <PopoverBody>
                         <Stack>{renderFilterOptions()}</Stack>
                     </PopoverBody>
