@@ -2,10 +2,10 @@ import { PhoneIcon, EmailIcon, AddIcon, CloseIcon, CheckIcon } from '@chakra-ui/
 import { Box, IconButton, Stack, Text, Textarea } from '@chakra-ui/react';
 import { ReactNode, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addNote, updateStatus } from '../../../redux/slices/JobManager.slice';
-import JobInfo, { Status } from '../../../types/JobInfo';
-import Note from '../../notes/Note';
-import StatusMenu from '../../status/StatusMenu';
+import { addNote, updateStatus } from '../../redux/slices/JobManager.slice';
+import JobInfo, { Status } from '../../types/JobInfo';
+import Note from '../notes/Note';
+import StatusMenu from '../status/StatusMenu';
 
 const Job = ({ job }: { job: JobInfo }) => {
     const dispatch = useDispatch();

@@ -1,7 +1,7 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Jobs from './components/pages/jobs/Jobs';
+import Jobs from './components/jobs/Jobs';
 import { generateRandomJobs, getAllJobs } from './redux/slices/JobManager.slice';
 import Client from './types/Client';
 

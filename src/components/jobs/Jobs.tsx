@@ -1,6 +1,6 @@
 import { Box, Heading, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSelectedJob, setSelectedJob } from '../../../redux/slices/JobManager.slice';
+import { getSelectedJob, setSelectedJob } from '../../redux/slices/JobManager.slice';
 import {
     getFilters,
     getSorting,
@@ -9,19 +9,19 @@ import {
     setSorting,
     setStatusFilters,
     setVisibleJobs,
-} from '../../../redux/slices/Sorting.slice';
-import { Comparator, SortedBy, SortingInfo } from '../../../types/Sorting';
-import { ReactNode, useCallback, useEffect } from 'react';
-import Sortable from '../../tableheaders/Sortable';
-import StatusTag from '../../status/StatusTag';
-import JobInfo, { Status } from '../../../types/JobInfo';
+} from '../../redux/slices/Sorting.slice';
+import { Comparator, SortedBy, SortingInfo } from '../../types/Sorting';
+import { ReactNode, useCallback, useEffect, useMemo } from 'react';
+import Sortable from '../tableheaders/Sortable';
+import StatusTag from '../status/StatusTag';
+import JobInfo, { Status } from '../../types/JobInfo';
 import Job from './Job';
-import Content from '../../Content';
-import Header from '../../header';
-import SearchBar from '../../searchbar';
-import Filterable, { FilterOption } from '../../tableheaders/Filterable';
-import { allValues, capitalise } from '../../../helpers/Utilities';
-import Client from '../../../types/Client';
+import Content from '../Content';
+import Header from '../header';
+import SearchBar from '../searchbar';
+import Filterable, { FilterOption } from '../tableheaders/Filterable';
+import { allValues, capitalise } from '../../helpers/Utilities';
+import Client from '../../types/Client';
 
 type TableColumn = { property: SortedBy; label?: string };
 
@@ -45,10 +45,14 @@ const Jobs = ({ allJobs, allClients }: { allJobs: Record<string, JobInfo>; allCl
     const sorting = useSelector(getSorting);
     const filters = useSelector(getFilters);
 
-    const clientFilterOptions: FilterOption[] = Object.values(allClients).map((client) => ({
-        value: client.clientCode,
-        render: <Text>{client.name}</Text>,
-    }));
+    const clientFilterOptions: FilterOption[] = useMemo(
+        () =>
+            Object.values(allClients).map((client) => ({
+                value: client.clientCode,
+                render: <Text>{client.name}</Text>,
+            })),
+        [allClients],
+    );
 
     useEffect(() => {
         dispatch(setVisibleJobs(Object.keys(allJobs)));
@@ -82,8 +86,11 @@ const Jobs = ({ allJobs, allClients }: { allJobs: Record<string, JobInfo>; allCl
         if (filters.status.length !== statusFilterOptions.length) {
             filteredJobs = filteredJobs.filter((id) => filters.status.includes(allJobs[id].status));
         }
+        if (filters.client.length !== clientFilterOptions.length) {
+            filteredJobs = filteredJobs.filter((id) => filters.client.includes(allJobs[id].client.clientCode));
+        }
         applySorting(sorting, filteredJobs);
-    }, [filters, sorting, allJobs, applySorting]);
+    }, [filters, sorting, allJobs, clientFilterOptions, applySorting]);
 
     useEffect(() => {
         handleFilters();
