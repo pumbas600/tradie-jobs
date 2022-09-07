@@ -21,6 +21,8 @@ const SearchBar = ({ placeholder }: { placeholder: string }) => {
     const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             dispatch(setSearchFilter(search));
+        } else if (e.key === 'Escape') {
+            setSearch('');
         }
     };
 
