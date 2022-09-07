@@ -1,4 +1,4 @@
-import { Box, Heading, Stack, Table, TableContainer, Tbody, Td, Thead, Tr } from '@chakra-ui/react';
+import { Box, Heading, Input, Stack, Table, TableContainer, Tbody, Td, Thead, Tr } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSelectedJob, setSelectedJob } from '../../../redux/slices/JobManager.slice';
 import { getSorting, getVisibleJobs, setSorting, setVisibleJobs } from '../../../redux/slices/Sorting.slice';
@@ -10,6 +10,7 @@ import Job from './Job';
 import { useEffect } from 'react';
 import Content from '../../Content';
 import Header from '../../header';
+import SearchBar from '../../searchbar';
 
 const comparators: Record<SortedBy, Comparator<JobInfo>> = {
     created: (a, b) => a.created - b.created,
@@ -71,7 +72,9 @@ const Jobs = ({ allJobs }: { allJobs: Record<string, JobInfo> }) => {
 
     return (
         <Box>
-            <Header></Header>
+            <Header>
+                <SearchBar placeholder="Search by name or id..." handleSearch={console.log} />
+            </Header>
             <Content>
                 <Stack direction="row" gap={2} mt={5}>
                     <TableContainer w="full">
