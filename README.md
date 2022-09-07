@@ -34,7 +34,7 @@ yarn start
 
 **Sorting / Filtering**
 
-Sortedby status and filtered by client
+Sorted by status and filtered by client
 ![Sorted by status and filtered by client](./screenshots/SortedByStatusAndFilteredByClient.png)
 
 Sorted by status and filtered by search
