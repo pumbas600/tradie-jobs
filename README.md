@@ -1,46 +1,52 @@
-# Getting Started with Create React App
+# Tradie Jobs 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The frontend for a job management web application that enables tradies to view jobs, add/edit notes and filter/sort the jobs. This was designed as part of the Fergus frontend technical assessment.
 
-## Available Scripts
+In this project, the filtering/sorting displayed in the `JobTable` is a fully functional custom built data-table using Chakra UI for the visuals and Redux for the state management.
 
-In the project directory, you can run:
+The UI is populated using 10 randomly generated jobs. These jobs will be regenerated if you refresh the page.
 
-### `yarn start`
+## Tech stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<div align="centre">
+<img src="https://img.shields.io/badge/react-%2361DAFB.svg?&style=for-the-badge&logo=react&logoColor=black" />
+<img src="https://img.shields.io/badge/chakra%20ui-%23319795.svg?&style=for-the-badge&logo=chakra%20ui&logoColor=white" />
+<img src="https://img.shields.io/badge/typescript-%233178C6.svg?&style=for-the-badge&logo=typescript&logoColor=white" />
+	<img src="https://img.shields.io/badge/redux-%23764ABC.svg?&style=for-the-badge&logo=redux&logoColor=white" />
+</div>
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Installation
 
-### `yarn test`
+It is recommended that you run this website using yarn. You can install it using: `npm i -g yarn`.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+After cloning the repository, you can start it with:
+```sh
+yarn install
+yarn start
+```
 
-### `yarn build`
+## Examples
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**Main UI**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+![No Selected Job](./screenshots/NoSelectedJob.png)
+![No Selected Job](./screenshots/SelectedJob.png)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+**Sorting / Filtering**
 
-### `yarn eject`
+Sortedby status and filtered by client
+![Sorted by status and filtered by client](./screenshots/SortedByStatusAndFilteredByClient.png)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Sorted by status and filtered by search
+![Sorted by status and filtered by search](./screenshots/SortedByStatusAndSortedBySearch.png)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Status column filter popup
+![Status filter popover](./screenshots/StatusFilterPopover.png)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+**Adding/Editing Notes**
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Adding a new note
+![Adding a new note](./screenshots/NewNote.png)
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Editing a note
+![Editing a note](./screenshots/EditNote.png)
