@@ -1,13 +1,19 @@
-import { Box, Heading, Input, Stack, Table, TableContainer, Tbody, Td, Thead, Tr } from '@chakra-ui/react';
+import { Box, Heading, Stack, Table, TableContainer, Tbody, Td, Thead, Tr } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSelectedJob, setSelectedJob } from '../../../redux/slices/JobManager.slice';
-import { getSorting, getVisibleJobs, setSorting, setVisibleJobs } from '../../../redux/slices/Sorting.slice';
-import { Comparator, SortedBy, SortingDirection } from '../../../types/Sorting';
+import {
+    getFilters,
+    getSorting,
+    getVisibleJobs,
+    setSorting,
+    setVisibleJobs,
+} from '../../../redux/slices/Sorting.slice';
+import { Comparator, SortedBy, SortingInfo } from '../../../types/Sorting';
 import Sortable, { SortableProps } from '../../tableheaders/Sortable';
+import { useCallback, useEffect } from 'react';
 import StatusTag from '../../status/StatusTag';
 import JobInfo from '../../../types/JobInfo';
 import Job from './Job';
-import { useEffect } from 'react';
 import Content from '../../Content';
 import Header from '../../header';
 import SearchBar from '../../searchbar';
@@ -23,29 +29,49 @@ const comparators: Record<SortedBy, Comparator<JobInfo>> = {
 const Jobs = ({ allJobs }: { allJobs: Record<string, JobInfo> }) => {
     const dispatch = useDispatch();
     const selectedJob = useSelector(getSelectedJob);
-    const sorting = useSelector(getSorting);
     const visibleJobs = useSelector(getVisibleJobs);
+    const sorting = useSelector(getSorting);
+    const filters = useSelector(getFilters);
 
     useEffect(() => {
-        console.log('set visible');
-        console.log(allJobs);
         dispatch(setVisibleJobs(Object.keys(allJobs)));
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
 
-    const handleChangeSort = (by: SortedBy, direction: SortingDirection) => {
-        applySorting(by, direction);
-        dispatch(setSorting({ by, direction }));
-    };
+    const applySorting = useCallback(
+        (sorting: SortingInfo, visibleJobs: string[]) => {
+            const comparator: Comparator<JobInfo> =
+                sorting.direction === 'asc' ? comparators[sorting.by] : (a, b) => -comparators[sorting.by](a, b);
 
-    const applySorting = (by: SortedBy, direction: SortingDirection) => {
-        const comparator: Comparator<JobInfo> =
-            direction === 'asc' ? comparators[by] : (a, b) => -comparators[by](a, b);
+            visibleJobs.sort((a, b) => comparator(allJobs[a], allJobs[b]));
+            dispatch(setVisibleJobs(visibleJobs));
+        },
+        [allJobs, dispatch],
+    );
 
-        const sortedJobs = [...visibleJobs];
-        sortedJobs.sort((a, b) => comparator(allJobs[a], allJobs[b]));
-        dispatch(setVisibleJobs(sortedJobs));
+    const handleFilters = useCallback(() => {
+        let filteredJobs = Object.keys(allJobs);
+        if (filters.search !== '') {
+            const loweredSearch = filters.search.toLowerCase();
+            filteredJobs = filteredJobs.filter((id) => {
+                const job = allJobs[id];
+                return (
+                    job.name.toLowerCase().includes(loweredSearch) ||
+                    allJobs[id].id.toLowerCase().includes(loweredSearch)
+                );
+            });
+        }
+        applySorting(sorting, filteredJobs);
+    }, [filters, sorting, allJobs, applySorting]);
+
+    useEffect(() => {
+        handleFilters();
+    }, [filters, handleFilters]);
+
+    const handleChangeSort = (sorting: SortingInfo) => {
+        applySorting(sorting, [...visibleJobs]);
+        dispatch(setSorting(sorting));
     };
 
     const renderJobRow = (jobId: string) => {
@@ -66,14 +92,14 @@ const Jobs = ({ allJobs }: { allJobs: Record<string, JobInfo> }) => {
     const getSortableProps = (property: SortedBy): SortableProps => {
         return {
             isApplied: property === sorting.by,
-            handleApply: (direction) => handleChangeSort(property, direction),
+            handleApply: (direction) => handleChangeSort({ by: property, direction }),
         };
     };
 
     return (
         <Box>
             <Header>
-                <SearchBar placeholder="Search by name or id..." handleSearch={console.log} />
+                <SearchBar placeholder="Search by name or id..." />
             </Header>
             <Content>
                 <Stack direction="row" gap={2} mt={5}>

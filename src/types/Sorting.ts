@@ -8,3 +8,7 @@ export interface SortingInfo {
     by: SortedBy;
     direction: SortingDirection;
 }
+
+export interface Filters {
+    search: string;
+}

@@ -2,14 +2,17 @@ import { CloseIcon, SearchIcon } from '@chakra-ui/icons';
 import { Input } from '@chakra-ui/input';
 import { IconButton, InputGroup, InputLeftElement, InputRightElement } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setSearchFilter } from '../../redux/slices/Sorting.slice';
 
-const SearchBar = ({ placeholder, handleSearch }: { placeholder: string; handleSearch(search: string): void }) => {
+const SearchBar = ({ placeholder }: { placeholder: string }) => {
+    const dispatch = useDispatch();
     const [search, setSearch] = useState('');
 
     useEffect(() => {
-        const timeout = setTimeout(() => handleSearch(search), 300);
+        const timeout = setTimeout(() => dispatch(setSearchFilter(search)), 300);
         return () => clearTimeout(timeout);
-    }, [search, handleSearch]);
+    }, [search, dispatch]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value);
@@ -17,7 +20,7 @@ const SearchBar = ({ placeholder, handleSearch }: { placeholder: string; handleS
 
     const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            handleSearch(search);
+            dispatch(setSearchFilter(search));
         }
     };
 
