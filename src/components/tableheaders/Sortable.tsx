@@ -1,5 +1,5 @@
 import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
-import { IconButton, IconButtonProps, Stack, Text, Th } from '@chakra-ui/react';
+import { IconButton, IconButtonProps, Stack, Text } from '@chakra-ui/react';
 import { ReactNode, useState } from 'react';
 import { SortingDirection } from '../../types/Sorting';
 
@@ -31,7 +31,6 @@ const Sortable = ({ isApplied, handleApply, children }: SortableProps) => {
             size: 'xs',
             color: isApplied ? 'current' : 'gray.400',
             title: tooltip,
-            w: '12px',
             onClick: handleOnClick,
             'aria-label': tooltip,
         };
@@ -44,12 +43,10 @@ const Sortable = ({ isApplied, handleApply, children }: SortableProps) => {
     };
 
     return (
-        <Th py={2}>
-            <Stack direction="row" spacing={1} ml={-1} alignItems="center">
-                {renderSortingButton()}
-                <Text>{children}</Text>
-            </Stack>
-        </Th>
+        <Stack direction="row" spacing={1} ml={-1} alignItems="center">
+            {renderSortingButton()}
+            <Text>{children}</Text>
+        </Stack>
     );
 };
 

@@ -1,4 +1,4 @@
-import { Box, Heading, Stack, Table, TableContainer, Tbody, Td, Thead, Tr } from '@chakra-ui/react';
+import { Box, Heading, Stack, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSelectedJob, setSelectedJob } from '../../../redux/slices/JobManager.slice';
 import {
@@ -9,14 +9,38 @@ import {
     setVisibleJobs,
 } from '../../../redux/slices/Sorting.slice';
 import { Comparator, SortedBy, SortingInfo } from '../../../types/Sorting';
-import Sortable, { SortableProps } from '../../tableheaders/Sortable';
-import { useCallback, useEffect } from 'react';
+import { ReactNode, useCallback, useEffect } from 'react';
+import Sortable from '../../tableheaders/Sortable';
 import StatusTag from '../../status/StatusTag';
 import JobInfo from '../../../types/JobInfo';
 import Job from './Job';
 import Content from '../../Content';
 import Header from '../../header';
 import SearchBar from '../../searchbar';
+import Filterable from '../../tableheaders/Filterable';
+
+type TableColumn = { property: SortedBy; label: string; filterable?: boolean };
+
+const tableColumns: TableColumn[] = [
+    {
+        property: 'status',
+        label: 'Status',
+        filterable: true,
+    },
+    {
+        property: 'id',
+        label: 'ID',
+    },
+    {
+        property: 'name',
+        label: 'Name',
+    },
+    {
+        property: 'client',
+        label: 'Client',
+        filterable: true,
+    },
+];
 
 const comparators: Record<SortedBy, Comparator<JobInfo>> = {
     created: (a, b) => a.created - b.created,
@@ -89,11 +113,25 @@ const Jobs = ({ allJobs }: { allJobs: Record<string, JobInfo> }) => {
         );
     };
 
-    const getSortableProps = (property: SortedBy): SortableProps => {
-        return {
-            isApplied: property === sorting.by,
-            handleApply: (direction) => handleChangeSort({ by: property, direction }),
-        };
+    const renderColumnLabel = (column: TableColumn): ReactNode => {
+        let reactNode = (
+            <Sortable
+                isApplied={column.property === sorting.by}
+                handleApply={(direction) => handleChangeSort({ by: column.property, direction })}
+            >
+                {column.label}
+            </Sortable>
+        );
+
+        if (column.filterable) {
+            reactNode = <Filterable filterOptions={[]}>{reactNode}</Filterable>;
+        }
+
+        return (
+            <Th key={column.property} py={2}>
+                {reactNode}
+            </Th>
+        );
     };
 
     return (
@@ -106,12 +144,7 @@ const Jobs = ({ allJobs }: { allJobs: Record<string, JobInfo> }) => {
                     <TableContainer w="full">
                         <Table variant="simple" size="md">
                             <Thead>
-                                <Tr>
-                                    <Sortable {...getSortableProps('status')}>Status</Sortable>
-                                    <Sortable {...getSortableProps('id')}>ID</Sortable>
-                                    <Sortable {...getSortableProps('name')}>Name</Sortable>
-                                    <Sortable {...getSortableProps('client')}>Client</Sortable>
-                                </Tr>
+                                <Tr>{tableColumns.map(renderColumnLabel)}</Tr>
                             </Thead>
                             <Tbody>{visibleJobs.map(renderJobRow)}</Tbody>
                         </Table>
